@@ -6,10 +6,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import uk.co.mhr.filemover.config.AppConfiguration;
 
@@ -31,16 +36,35 @@ public class FileMoverApp extends Application {
     }
 
     private AppConfiguration config;
+    private List<FileTransferRule> rules;
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(final Stage primaryStage) throws Exception {
-        loadAppConfiguration();
+        config = loadAppConfiguration();
+        rules = setupRules();
+        showGUI(primaryStage);
+    }
+
+    private void showGUI(final Stage primaryStage) {
+        try {
+            GridPane root = (GridPane) FXMLLoader.load(getClass().getResource("FileMoverApp.fxml"));
+            Scene scene = new Scene(root, 400, 400);
+            scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Loads the application configuration from file.
      */
-    private void loadAppConfiguration() {
+    private AppConfiguration loadAppConfiguration() {
         final ObjectMapper mapper = new ObjectMapper();
 
         if (!CONFIG_FILE_PATH.toFile().exists()) {
@@ -50,7 +74,7 @@ public class FileMoverApp extends Application {
         if (CONFIG_FILE_PATH.toFile().canRead()) {
             try {
                 final String configJSON = new String(Files.readAllBytes(CONFIG_FILE_PATH), StandardCharsets.UTF_8);
-                config = mapper.readValue(configJSON, AppConfiguration.class);
+                return mapper.readValue(configJSON, AppConfiguration.class);
             } catch (final IOException e) {
                 throw new RuntimeException("Unable to read configuration file. Nested exception was: " + e.getMessage());
             }
@@ -60,7 +84,7 @@ public class FileMoverApp extends Application {
     }
 
     /**
-     * Creates an empty configuration file in the configuration directory.
+     * Creates the default configuration file in the configuration directory.
      */
     private void runFirstTimeSetup() {
         try {
@@ -68,6 +92,12 @@ public class FileMoverApp extends Application {
         } catch (final IOException e) {
             throw new RuntimeException("Unable to create configuration file: " + e.getMessage());
         }
+    }
+
+    private List<FileTransferRule> setupRules() {
+        return config.getTransferRules().stream()
+                .map(xr -> new FileTransferRule(Paths.get(xr.getSourceDirectory()), Paths.get(xr.getDestinationDirectory()), xr.getDisplayName()))
+                .collect(Collectors.toList());
     }
 
 }
