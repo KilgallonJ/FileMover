@@ -1,0 +1,10 @@
+{
+    "title": "File Mover",
+    "transferRule": [
+        {
+            "sourceDirectory": ".",
+            "destinationDirectory": ".",
+            "displayName": "Default Transfer Rule"
+        }
+    ]
+}
