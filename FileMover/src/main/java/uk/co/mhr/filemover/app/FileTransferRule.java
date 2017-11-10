@@ -38,8 +38,16 @@ public class FileTransferRule {
     }
 
     /**
-     * Invokes this transfer rule to move the detected file.
-     * @param event The WatchEvent that triggered this invocation.
+     * Returns the path of the source directory.
+     * @return The path of the source directory.
+     */
+    public Path getSource() {
+        return source;
+    }
+
+    /**
+     * Invokes this transfer rule to copy the selected files.
+     * @param files The list of files that should be copied.
      */
     public void apply(final List<Path> files) {
         copySelectedFiles(files);

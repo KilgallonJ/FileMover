@@ -9,21 +9,19 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.JApplet;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import uk.co.mhr.filemover.config.AppConfiguration;
+import uk.co.mhr.filemover.gui.MainWindow;
 
 /**
  * The main driver class for the FileMover app.
  * @author Jonathan Kilgallon
  * @since Version 0.0.1
  */
-public class FileMoverApp extends Application {
+public class FileMoverApp extends JApplet {
 
     private static final Path CONFIG_FILE_PATH;
     private static final Path DEFAULT_CONFIGURATION_FILE = Paths.get("/defaultConfiguration.json");
@@ -38,27 +36,18 @@ public class FileMoverApp extends Application {
     private AppConfiguration config;
     private List<FileTransferRule> rules;
 
-    public static void main(String[] args) {
-        launch(args);
+    public static void main(final String[] args) {
+        new FileMoverApp().initialize();
     }
 
-    @Override
-    public void start(final Stage primaryStage) throws Exception {
+    private void initialize() {
         config = loadAppConfiguration();
         rules = setupRules();
-        showGUI(primaryStage);
+        displayGUI();
     }
 
-    private void showGUI(final Stage primaryStage) {
-        try {
-            GridPane root = (GridPane) FXMLLoader.load(getClass().getResource("FileMoverApp.fxml"));
-            Scene scene = new Scene(root, 400, 400);
-            scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void displayGUI() {
+        new MainWindow(config, rules);
     }
 
     /**
