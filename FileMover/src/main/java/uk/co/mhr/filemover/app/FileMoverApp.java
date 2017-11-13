@@ -1,15 +1,15 @@
 package uk.co.mhr.filemover.app;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.swing.JApplet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +28,7 @@ public class FileMoverApp extends JApplet {
 
     private static final Path CONFIG_DIR_PATH;
     private static final Path CONFIG_FILE_PATH;
-    private static final Path DEFAULT_CONFIGURATION_FILE;
+    private static final String DEFAULT_CONFIGURATION_FILE;
 
     static {
         final String userHome = System.getProperty("user.home");
@@ -36,10 +36,17 @@ public class FileMoverApp extends JApplet {
         CONFIG_DIR_PATH = Paths.get(userHome + "/FileMover/");
         CONFIG_FILE_PATH = CONFIG_DIR_PATH.resolve("configuration.json");
         try {
-            DEFAULT_CONFIGURATION_FILE = Paths
-                    .get(FileMoverApp.class.getClassLoader().getResource("defaultConfiguration.json").toURI());
-        } catch (URISyntaxException e) {
-            throw new ExceptionInInitializerError(e);
+            try (final BufferedReader configFile = new BufferedReader(new InputStreamReader(
+                    ClassLoader.getSystemClassLoader().getResourceAsStream("defaultConfiguration.json")))) {
+
+                final StringBuilder contents = new StringBuilder();
+
+                configFile.lines().forEach(contents::append);
+                DEFAULT_CONFIGURATION_FILE = contents.toString();
+            }
+        } catch (final IOException e) {
+            e.printStackTrace();
+            throw new ExceptionInInitializerError(e.getMessage());
         }
     }
 
@@ -90,7 +97,11 @@ public class FileMoverApp extends JApplet {
             if (!CONFIG_DIR_PATH.toFile().exists()) {
                 Files.createDirectory(CONFIG_DIR_PATH);
             }
-            Files.copy(DEFAULT_CONFIGURATION_FILE, CONFIG_FILE_PATH, StandardCopyOption.REPLACE_EXISTING);
+
+            final Path configPath = Files.createFile(CONFIG_FILE_PATH);
+
+            Files.write(configPath, DEFAULT_CONFIGURATION_FILE.getBytes(StandardCharsets.UTF_8),
+                    StandardOpenOption.TRUNCATE_EXISTING);
         } catch (final IOException e) {
             throw new RuntimeException("Unable to create configuration file: " + e.getMessage());
         }
