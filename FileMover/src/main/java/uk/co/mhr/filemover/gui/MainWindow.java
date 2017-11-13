@@ -37,8 +37,8 @@ import uk.co.mhr.filemover.config.AppConfigurationLoader;
  */
 public class MainWindow {
 
-    private static final int MIN_WIDTH = 400;
-    private static final int MIN_HEIGHT = 400;
+    private static final int MIN_WIDTH = 500;
+    private static final int MIN_HEIGHT = 500;
     private static final int MIN_CELL_WIDTH = MIN_WIDTH / 2;
 
     private JFrame frame;
@@ -62,15 +62,15 @@ public class MainWindow {
     private void initialise(final AppConfiguration config, final List<FileTransferRule> rules) {
         frame.getContentPane().removeAll();
 
+        frame.setTitle(config.getTitle());
+        frame.setSize(MIN_WIDTH, MIN_HEIGHT);
+
         menu = new JMenuBar();
         getMenu().forEach(menu::add);
 
         frame.setJMenuBar(menu);
 
         initContentPane(rules);
-
-        frame.setTitle(config.getTitle());
-        frame.setSize(MIN_WIDTH, MIN_HEIGHT);
 
         final Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -82,6 +82,8 @@ public class MainWindow {
 
     private void initContentPane(final List<FileTransferRule> rules) {
         splitPane = new JSplitPane();
+        splitPane.setDividerLocation(frame.getWidth() / 2);
+        splitPane.setResizeWeight(0.5);
         frame.getContentPane().add(splitPane);
 
         panel = new JPanel();
@@ -91,8 +93,6 @@ public class MainWindow {
         list.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         list.setFixedCellWidth(MIN_CELL_WIDTH);
         splitPane.setLeftComponent(list);
-
-        splitPane.setDividerLocation(0.5);
 
         panel.setLayout(new GridLayout(rules.size() + 1, 1, 0, 0));
 
