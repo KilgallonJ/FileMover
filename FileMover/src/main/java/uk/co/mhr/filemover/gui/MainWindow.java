@@ -28,7 +28,6 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -125,21 +124,14 @@ public class MainWindow {
             ruleMap.put(rule.getDisplayName(), rule);
 
             ruleRadioButton.addActionListener((a) -> {
-                populateJList(rule);
+                new DirectoryReaderWorker(rule, list).execute();
             });
         }
 
         if (!radioButtons.isEmpty()) {
             final JRadioButton btn = radioButtons.get(0);
             btn.setSelected(true);
-            populateJList(ruleMap.get(btn.getText()));
+            new DirectoryReaderWorker(ruleMap.get(btn.getText()), list).execute();
         }
-    }
-
-    private void populateJList(final FileTransferRule rule) {
-        final DefaultListModel<String> model = new DefaultListModel<>();
-        Stream.of(rule.getSource().toFile().listFiles(rule.getFilter())).map(File::getName).forEach(model::addElement);
-
-        list.setModel(model);
     }
 }

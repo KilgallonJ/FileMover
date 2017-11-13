@@ -41,7 +41,7 @@ public class FileMoverApp extends JApplet {
 
                 final StringBuilder contents = new StringBuilder();
 
-                configFile.lines().forEach(contents::append);
+                configFile.lines().forEach(s -> contents.append(s).append(System.lineSeparator()));
                 DEFAULT_CONFIGURATION_FILE = contents.toString();
             }
         } catch (final IOException e) {
