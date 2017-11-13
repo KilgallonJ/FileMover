@@ -18,6 +18,9 @@ public class TransferRuleConfiguration {
     @JsonProperty("displayName")
     private String displayName;
 
+    @JsonProperty("fileExtensionFilter")
+    private String extensionFilter;
+
     /**
      * Returns the string used to display this rule in the UI.
      * @return The displayable name for this rule.
@@ -40,6 +43,14 @@ public class TransferRuleConfiguration {
      */
     public String getDestinationDirectory() {
         return destinationDirectory;
+    }
+
+    /**
+     * The filter that should be applied to file extensions (if any).
+     * @return The filter that should be applied to the files shown in the app.
+     */
+    public String getExtensionFilter() {
+        return extensionFilter;
     }
 
     @Override

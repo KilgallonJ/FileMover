@@ -1,5 +1,6 @@
 package uk.co.mhr.filemover.app;
 
+import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,6 +17,7 @@ public class FileTransferRule {
     private final Path source;
     private final Path destination;
     private final String displayName;
+    private final FileExtensionFilter filter;
 
     /**
      * Instantiate this rule.
@@ -23,10 +25,11 @@ public class FileTransferRule {
      * @param destination The destination directory.
      * @param displayName The displayable name of this rule.
      */
-    FileTransferRule(final Path source, final Path destination, final String displayName) {
+    FileTransferRule(final Path source, final Path destination, final String displayName, final String extension) {
         this.source = source;
         this.destination = destination;
         this.displayName = displayName;
+        filter = new FileExtensionFilter(extension);
     }
 
     /**
@@ -54,6 +57,14 @@ public class FileTransferRule {
     }
 
     /**
+     * Returns the file filter that this rule uses.
+     * @return The file filter for this rule.
+     */
+    public FileFilter getFilter() {
+        return filter;
+    }
+
+    /**
      * Copy a file from the source folder to the destination folder.
      */
     private void copySelectedFiles(final List<Path> files) {
@@ -67,7 +78,7 @@ public class FileTransferRule {
     private void copyFile(final Path file) {
         final Path fileName = file.getFileName();
         try {
-            Files.copy(file, destination.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(source.resolve(file), destination.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
         } catch (final IOException e) {
             throw new RuntimeException("Unable to copy source file: " + e.getMessage());
         }

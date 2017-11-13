@@ -1,6 +1,7 @@
 package uk.co.mhr.filemover.app;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,14 +24,23 @@ import uk.co.mhr.filemover.gui.MainWindow;
  */
 public class FileMoverApp extends JApplet {
 
+    private static final long serialVersionUID = 1264520808607336022L;
+
+    private static final Path CONFIG_DIR_PATH;
     private static final Path CONFIG_FILE_PATH;
-    private static final Path DEFAULT_CONFIGURATION_FILE = Paths.get("/defaultConfiguration.json");
+    private static final Path DEFAULT_CONFIGURATION_FILE;
 
     static {
         final String userHome = System.getProperty("user.home");
-        final String pathSep = System.getProperty("path.separator");
 
-        CONFIG_FILE_PATH = Paths.get(userHome + pathSep + "FileMover" + pathSep + "configuration.json");
+        CONFIG_DIR_PATH = Paths.get(userHome + "/FileMover/");
+        CONFIG_FILE_PATH = CONFIG_DIR_PATH.resolve("configuration.json");
+        try {
+            DEFAULT_CONFIGURATION_FILE = Paths
+                    .get(FileMoverApp.class.getClassLoader().getResource("defaultConfiguration.json").toURI());
+        } catch (URISyntaxException e) {
+            throw new ExceptionInInitializerError(e);
+        }
     }
 
     private AppConfiguration config;
@@ -77,7 +87,10 @@ public class FileMoverApp extends JApplet {
      */
     private void runFirstTimeSetup() {
         try {
-            Files.copy(DEFAULT_CONFIGURATION_FILE, CONFIG_FILE_PATH, StandardCopyOption.COPY_ATTRIBUTES);
+            if (!CONFIG_DIR_PATH.toFile().exists()) {
+                Files.createDirectory(CONFIG_DIR_PATH);
+            }
+            Files.copy(DEFAULT_CONFIGURATION_FILE, CONFIG_FILE_PATH, StandardCopyOption.REPLACE_EXISTING);
         } catch (final IOException e) {
             throw new RuntimeException("Unable to create configuration file: " + e.getMessage());
         }
@@ -85,7 +98,8 @@ public class FileMoverApp extends JApplet {
 
     private List<FileTransferRule> setupRules() {
         return config.getTransferRules().stream()
-                .map(xr -> new FileTransferRule(Paths.get(xr.getSourceDirectory()), Paths.get(xr.getDestinationDirectory()), xr.getDisplayName()))
+                .map(xr -> new FileTransferRule(Paths.get(xr.getSourceDirectory()), Paths.get(xr.getDestinationDirectory()),
+                        xr.getDisplayName(), xr.getExtensionFilter()))
                 .collect(Collectors.toList());
     }
 
