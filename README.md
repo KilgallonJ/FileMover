@@ -1,37 +1,11 @@
-## Welcome to GitHub Pages
+## FileMover
 
-You can use the [editor on GitHub](https://github.com/KilgallonJ/FileMover/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+This is a small, lightweight utility app that simply copies arbitrary files from one location to another at the click of a button. It originally came into being to help my organisation's non-technical testers to easily deploy .war files that they acquired from developers to their local containers.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Usage
 
-### Markdown
+Simply double-click the FileMover.jar file to run it. While the app is running, you can reload the configuration by pressing F5 - this will reread the configuration.json file found in `%USER_HOME%/FileMover/` and refresh the UI accordingly without the need to restart the app.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+#### About the Author
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/KilgallonJ/FileMover/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+I'm a Software Delivery Lead and Java Developer at MHR, based in Nottingham, England. I've been a professional developer since early 2012.
