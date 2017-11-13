@@ -1,9 +1,3 @@
-/**
- * (c) Midland Software Limited 2017
- * Name     : TransferRuleWorker.java
- * Author   : kilgallonj
- * Date     : 13 Nov 2017
- */
 package uk.co.mhr.filemover.gui;
 
 import java.awt.Component;

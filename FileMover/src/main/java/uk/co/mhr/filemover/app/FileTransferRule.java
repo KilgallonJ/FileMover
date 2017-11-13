@@ -25,7 +25,7 @@ public class FileTransferRule {
      * @param destination The destination directory.
      * @param displayName The displayable name of this rule.
      */
-    FileTransferRule(final Path source, final Path destination, final String displayName, final String extension) {
+    public FileTransferRule(final Path source, final Path destination, final String displayName, final String extension) {
         this.source = source;
         this.destination = destination;
         this.displayName = displayName;
