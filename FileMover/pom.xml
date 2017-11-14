@@ -6,7 +6,7 @@
   
   <groupId>uk.co.mhr.filemover</groupId>
   <artifactId>mhr-file-mover</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-Alpha</version>
   <name>File Mover</name>
   <description>Runnable file moving utility to move files between sets of configured directories.</description>
   <packaging>jar</packaging>
