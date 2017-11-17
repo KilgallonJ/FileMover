@@ -53,6 +53,8 @@ public class MainWindow {
 
     private JList<String> list;
 
+    private boolean hasInitialisedPreviously;
+
     public MainWindow() {
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,12 +74,17 @@ public class MainWindow {
 
         initContentPane(rules);
 
-        final Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
+        if (!hasInitialisedPreviously) {
+            final Dimension screenDimensions = Toolkit.getDefaultToolkit().getScreenSize();
+            final int xLoc = (screenDimensions.width / 2) - (MIN_WIDTH / 2);
+            final int yLoc = (screenDimensions.height / 2) - (MIN_HEIGHT / 2);
 
-        frame.setLocation((screenDimensions.width / 2) - (MIN_WIDTH / 2), (screenDimensions.height / 2) - (MIN_HEIGHT / 2));
+            frame.setLocation(xLoc, yLoc);
+        }
 
         frame.revalidate();
         frame.setVisible(true);
+        hasInitialisedPreviously = true;
     }
 
     private void initContentPane(final List<FileTransferRule> rules) {
