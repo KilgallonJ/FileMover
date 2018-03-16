@@ -146,14 +146,14 @@ public class MainWindow {
             ruleMap.put(rule.getDisplayName(), rule);
 
             ruleRadioButton.addActionListener((a) -> {
-                new DirectoryReaderWorker(rule, list).execute();
+                new DirectoryReaderWorker(rule, list, group).execute();
             });
         }
 
         if (!radioButtons.isEmpty()) {
             final JRadioButton btn = radioButtons.get(0);
             btn.setSelected(true);
-            new DirectoryReaderWorker(ruleMap.get(btn.getText()), list).execute();
+            new DirectoryReaderWorker(ruleMap.get(btn.getText()), list, group).execute();
         }
     }
 

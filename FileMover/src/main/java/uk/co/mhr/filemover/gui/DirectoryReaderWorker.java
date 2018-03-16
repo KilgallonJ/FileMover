@@ -2,9 +2,12 @@ package uk.co.mhr.filemover.gui;
 
 import java.awt.Cursor;
 import java.io.File;
+import java.util.Enumeration;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.SwingWorker;
@@ -18,10 +21,12 @@ public class DirectoryReaderWorker extends SwingWorker<DefaultListModel<String>,
 
     private FileTransferRule rule;
     private JList<String> list;
+    private ButtonGroup group;
 
-    public DirectoryReaderWorker(final FileTransferRule rule, final JList<String> list) {
+    public DirectoryReaderWorker(final FileTransferRule rule, final JList<String> list, final ButtonGroup group) {
         this.rule = rule;
         this.list = list;
+        this.group = group;
     }
 
     /**
@@ -32,6 +37,7 @@ public class DirectoryReaderWorker extends SwingWorker<DefaultListModel<String>,
         final Cursor currentCursor = list.getParent().getParent().getCursor();
 
         try {
+            setButtonGroupState(false);
             list.getParent().getParent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             final DefaultListModel<String> model = new DefaultListModel<>();
             File[] files = rule.getSource().toFile().listFiles(rule.getFilter());
@@ -44,6 +50,7 @@ public class DirectoryReaderWorker extends SwingWorker<DefaultListModel<String>,
             return model;
         } finally {
             list.getParent().getParent().setCursor(currentCursor);
+            setButtonGroupState(true);
         }
     }
 
@@ -56,4 +63,11 @@ public class DirectoryReaderWorker extends SwingWorker<DefaultListModel<String>,
         }
     }
 
+    private void setButtonGroupState(final boolean isEnabled) {
+        final Enumeration<AbstractButton> buttons = group.getElements();
+        while (buttons.hasMoreElements()) {
+            final AbstractButton button = buttons.nextElement();
+            button.setEnabled(isEnabled);
+        }
+    }
 }
