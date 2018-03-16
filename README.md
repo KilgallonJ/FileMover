@@ -21,6 +21,10 @@ FileMover is a Maven project. In order to build the runnable .jar artifact you n
 FileMover aims to be platform-independent, so it _should_ work on all platforms. It has been tested and verified on the following:
  - Windows 7
  - Windows 10
+ 
+## Known Limitations
+
+FileMover cannot currently transfer files between Windows and \*Nix environments. Windows to Windows and \*Nix to \*Nix work fine.
 
 #### About the Author
 
