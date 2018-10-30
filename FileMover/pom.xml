@@ -6,7 +6,7 @@
   
   <groupId>uk.co.mhr.filemover</groupId>
   <artifactId>mhr-file-mover</artifactId>
-  <version>0.0.4-Alpha</version>
+  <version>0.0.5-Alpha</version>
   <name>File Mover</name>
   <description>Runnable file moving utility to move files between sets of configured directories.</description>
   <packaging>jar</packaging>
@@ -19,7 +19,7 @@
     <maven.compiler.version>3.7.0</maven.compiler.version>
     <maven.surefire.version>2.19.1</maven.surefire.version>
     
-    <jackson.version>2.9.0</jackson.version>
+    <jackson.version>2.9.6</jackson.version>
     
     <junit.platform.version>1.0.1</junit.platform.version>
     <junit.jupiter.version>5.0.1</junit.jupiter.version>
@@ -38,6 +38,7 @@
           <target>${java.version}</target>
         </configuration>
       </plugin>
+
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven.surefire.version}</version>
@@ -56,10 +57,10 @@
           </dependencies>
         </configuration>
       </plugin>
+
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
-          <finalName>${project.name}</finalName>
           <appendAssemblyId>false</appendAssemblyId>
           <archive>
             <manifest>
@@ -81,11 +82,13 @@
       <artifactId>jackson-core</artifactId>
       <version>${jackson.version}</version>
     </dependency>
+
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>${jackson.version}</version>
     </dependency>
+
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
@@ -99,18 +102,21 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>${junit.jupiter.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-runner</artifactId>
       <version>${junit.platform.version}</version>
       <scope>test</scope>
     </dependency>
+
     <!-- Prevents compiler warnings about @API annotations used in the JUnit code. -->
     <dependency>
       <groupId>org.apiguardian</groupId>
